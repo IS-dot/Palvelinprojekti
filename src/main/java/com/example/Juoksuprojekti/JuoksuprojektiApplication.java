@@ -26,11 +26,11 @@ public class JuoksuprojektiApplication {
 			log.info("save a couple of runs");
 
 			User user1 = new User("user", "$2a$10$1814xC2KWOz2qpyKvUpuR.Nab1qt/Ew28q.2nHhfagDxAyVcW4ciq", "USER",
-					"user@email.com");
+					"user@email.com", 0.0);
 			User user2 = new User("admin", "$2a$10$0MMwY.IQqpsVc1jC8u7IJ.2rT8b0Cd3b3sfIBGV2zfgnPGtT4r0.C", "ADMIN",
-					"admin@email.com");
+					"admin@email.com", 0.0);
 			User user3 = new User("testi", "$2a$10$1814xC2KWOz2qpyKvUpuR.Nab1qt/Ew28q.2nHhfagDxAyVcW4ciq", "USER",
-					"testi@email.com");
+					"testi@email.com", 0.0);
 			urepository.save(user1);
 			urepository.save(user2);
 			urepository.save(user3);

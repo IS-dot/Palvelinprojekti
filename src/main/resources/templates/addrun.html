@@ -1,0 +1,49 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>List of runs</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+	<h1>Add run</h1>
+	
+	<div th:if="${#httpServletRequest.remoteUser != null}">
+    <p th:text="${#httpServletRequest.remoteUser}">
+    </p>
+    
+</div>
+	<div>
+		<form th:object="${run}" th:action="@{save}" action="#" method="post">
+		  	<label for="type">Type</label>
+			<input type="text" id="type" th:field="*{type}" />
+			<div style="clear: both; display: block; height: 10px;"></div>
+		  	<label for="distance">Distance</label>
+			<input type="text" id="distance" th:field="*{distance}" />
+			<div style="clear: both; display: block; height: 10px;"></div>
+		  	<label for="starttime">Start time</label>
+			<input type="text" th:field="*{starttime}" />
+			<div style="clear: both; display: block; height: 10px;"></div>
+			<label for="endtime">End time</label>
+			<input type="text" th:field="*{endtime}" />
+
+			    		
+	     	<div style="clear: both; display: block; height: 10px;"></div>
+			<label for="userlist">User</label>
+			<select id= userlist th:field="*{user}" class="form-control">
+				<option th:value="${user.userId}" th:text="${user.username}"></option>
+			</select>  
+			 
+			
+			 
+				
+			<div style="clear: both; display: block; height: 10px;"></div>
+			<input type="submit" value="Save"></input>
+		</form>
+	
+			
+			<!-- <div style="clear: both; display: block; height: 10px;"></div>
+			<input type="submit" value="Save"></input> -->
+			
+	</div>
+</body>
+</html>

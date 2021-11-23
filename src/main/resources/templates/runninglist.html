@@ -1,14 +1,14 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
-    <title>Juoksulista</title>
+    <title>List of runs</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" th:href="@{css/bootstrap.min.css}" />
 </head>
 <body>
 <div class="container">
 	<div class="col-md-4">
-		<h1>Books</h1>
+		<h1>Runs</h1>
 	</div>
 	<div class="col-md-4">
 		<h3 th:inline="text">Welcome [[${#httpServletRequest.remoteUser}]]</h3>
@@ -32,9 +32,9 @@
 		    <th>Distance</th>
 		    <th>Start time</th>
 		    <th>End time</th>
-<!-- 		    <th>Category</th>
+ 		 <!--    <th>Category</th> -->
 		    <th sec:authorize="hasAuthority('ADMIN')"> </th>
-		    <th></th> -->
+		    <th></th> 
 		   
 		    
 		</tr>  
@@ -44,11 +44,24 @@
     		<td th:text="${run.starttime}"></td>
     		<td th:text="${run.endtime}"></td>
     		<!-- <td th:text="${book.price}"></td> -->
-    		<!-- <td th:text="${book.category.categoryName}"></td>
- 				<td sec:authorize="hasAuthority('ADMIN')"><a th:href="@{/delete/{id}(id=${book.id})}" class="btn btn-danger">Delete</a></td> 
- 				<td><a class="btn btn-success" th:href="@{/edit/{id}(id=${book.id})}">Edit</a></td> -->  	
+    		<!-- <td th:text="${book.category.categoryName}"></td> -->
+ 				<td sec:authorize="hasAuthority('ADMIN')"><a th:href="@{/delete/{id}(id=${run.id})}" class="btn btn-danger">Delete</a></td> 
+ 				<td><a class="btn btn-success" th:href="@{/edit/{id}(id=${run.id})}">Edit</a></td> 
     	</tr>
      </table>
+     
+      <table class="table table-striped">
+      <tr>
+		    <th>Dotal distance</th>
+		    <th>Distance to goal</th>
+		</tr>
+     <tr th:if="${#httpServletRequest.remoteUser == user.username}" th:each = "user : ${users}"> 
+    		<td th:text="${user.distTogether}"></td>
+    		<td th:text="${100 - user.distTogether}"></td>
+    	</tr>
+    </table>	
+     
+     
 	 <a class="btn btn-success" href="/add">Add new run</a> 
 	 <!--  <a class="btn btn-success" href="/username/">Add book</a> --> 
 <div/>   	

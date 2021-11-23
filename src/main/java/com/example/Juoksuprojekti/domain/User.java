@@ -35,6 +35,9 @@ public class User {
 	@Column(name = "email", nullable = false)
 	private String email;
 
+	@Column(name = "disttogether")
+	private double distTogether;
+
 	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	private List<Run> runs;
@@ -42,17 +45,22 @@ public class User {
 	public User() {
 	}
 
-	public User(String username, String passwordHash, String role, String email) {
+	public User(String username, String passwordHash, String role, String email, double distTogether) {
 		super();
 		this.username = username;
 		this.passwordHash = passwordHash;
 		this.role = role;
 		this.email = email;
+		this.distTogether = 0;
 	}
 
 	public User(String username) {
 		super();
 		this.username = null;
+	}
+
+	public void laskeMatka(double distTogether) {
+		this.distTogether += distTogether;
 	}
 
 	public Long getUserId() {
@@ -103,10 +111,18 @@ public class User {
 		this.runs = runs;
 	}
 
+	public double getDistTogether() {
+		return distTogether;
+	}
+
+	public void setDistTogether(double distTogether) {
+		this.distTogether = distTogether;
+	}
+
 	@Override
 	public String toString() {
 		return "User [userId=" + userId + ", username=" + username + ", passwordHash=" + passwordHash + ", role=" + role
-				+ ", email=" + email + "]";
+				+ ", email=" + email + ", distTogether=" + distTogether + "]";
 	}
 
 }

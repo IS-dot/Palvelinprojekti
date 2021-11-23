@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>List of runs</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+	<h1>Edit run</h1>
+	<div>
+		<form th:object="${run}" th:action="@{../save}" action="#" method="post">
+			<label for="id"></label>
+			<input type="hidden" id="id" th:field="*{id}" readonly="readonly"/>
+			<div style="clear: both; display: block; height: 10px;"></div>
+		  	<label for="type">Type</label>
+			<input type="text" id="title" th:field="*{type}" />
+			<div style="clear: both; display: block; height: 10px;"></div>
+		  	<label for="distance">Distance</label>
+			<input type="text" id="distance" th:field="*{distance}" />
+			<div style="clear: both; display: block; height: 10px;"></div>
+		  	<label for="starttime">Start time</label>
+			<input type="text" th:field="*{starttime}" />
+			<div style="clear: both; display: block; height: 10px;"></div>
+			<label for="endtime">End time</label>
+			<input type="text" th:field="*{endtime}" />
+<!-- 			<div style="clear: both; display: block; height: 10px;"></div>
+			<label for="price">Price</label>
+			<input type="text" th:field="*{price}" /> -->
+			
+<!-- 			<div style="clear: both; display: block; height: 10px;"></div>						
+		  	<label for="catlist">Category</label>
+			 <select id="catlist" th:field="*{category}" class="form-control">
+       			<option th:each="category: ${categories}" th:value="${category.categoryId}" th:text="${category.categoryName}"></option>
+    		</select> -->
+			
+			<div style="clear: both; display: block; height: 10px;"></div>
+			<label for="userlist">User</label>
+			<select id= userlist th:field="*{user}" class="form-control">
+				<option th:each="user: ${users}" th:value="${user.userId}" th:text="${user.username}"></option>
+			</select>
+			
+			
+			<div style="clear: both; display: block; height: 10px;"></div>
+			<input type="submit" value="Save"></input>
+		</form>
+	</div>
+</body>
+</html>
