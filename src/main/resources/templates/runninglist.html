@@ -13,14 +13,15 @@
 	<div class="col-md-4">
 		<h3 th:inline="text">Welcome [[${#httpServletRequest.remoteUser}]]</h3>
 		
-	<!-- 	<div th:if="${#httpServletRequest.remoteUser != null}">
+	<!-- <div th:if="${#httpServletRequest.remoteUser != null}">
     <p th:text="${#httpServletRequest.remoteUser}"><br>
     </p>
     <p th:text="${#httpServletRequest.userPrincipal}">
     </p>
     <span sec:authentication="name">Bob</span>
-     <span sec:authentication="principal.authorities">[ROLE_USER, ROLE_ADMIN]</span>
-	</div> -->
+     <span sec:authentication="principal.authorities">[ROLE_USER, ROLE_ADMIN]</span> -->
+	</div>
+	
 		<div class="col-md-4" style="padding:20px 0">
 		<form th:action="@{/logout}" method="post">
 			<input type="submit" value="Sign Out" class="btn btn-sm btn-danger"/>
@@ -30,21 +31,24 @@
 		<tr>
 		    <th>Type</th>
 		    <th>Distance</th>
-		    <th>Start time</th>
-		    <th>End time</th>
- 		 <!--    <th>Category</th> -->
+		    <th>Date</th>
+ 			<th></th>
 		    <th sec:authorize="hasAuthority('ADMIN')"> </th>
 		    <th></th> 
-		   
-		    
-		</tr>  
+		</tr> 
+		 
     	<tr th:if="${#httpServletRequest.remoteUser == run.user.username}" th:each = "run : ${runs}">
     		<td th:text="${run.type}"></td>
     		<td th:text="${run.distance}"></td>
-    		<td th:text="${run.starttime}"></td>
-    		<td th:text="${run.endtime}"></td>
-    		<!-- <td th:text="${book.price}"></td> -->
-    		<!-- <td th:text="${book.category.categoryName}"></td> -->
+    		<td th:text="${run.perfDay}"></td>
+ 				<td sec:authorize="hasAuthority('ADMIN')"><a th:href="@{/delete/{id}(id=${run.id})}" class="btn btn-danger">Delete</a></td> 
+ 				<td><a class="btn btn-success" th:href="@{/edit/{id}(id=${run.id})}">Edit</a></td> 
+    	</tr>
+    		<tr th:if="${#httpServletRequest.remoteUser == 'admin'}" th:each = "run : ${runs}">
+    		<td th:text="${run.type}"></td>
+    		<td th:text="${run.distance}"></td>
+    		<td th:text="${run.perfDay}"></td>
+    		<td th:text="${run.user.username}"></td>
  				<td sec:authorize="hasAuthority('ADMIN')"><a th:href="@{/delete/{id}(id=${run.id})}" class="btn btn-danger">Delete</a></td> 
  				<td><a class="btn btn-success" th:href="@{/edit/{id}(id=${run.id})}">Edit</a></td> 
     	</tr>
@@ -52,7 +56,7 @@
      
       <table class="table table-striped">
       <tr>
-		    <th>Dotal distance</th>
+		    <th>Total distance</th>
 		    <th>Distance to goal</th>
 		</tr>
      <tr th:if="${#httpServletRequest.remoteUser == user.username}" th:each = "user : ${users}"> 

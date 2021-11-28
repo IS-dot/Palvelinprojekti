@@ -65,7 +65,7 @@ public class JuoksuController {
 
 	@RequestMapping(value = { "/", "/runninglist" })
 	public String bookList(Model model) {
-		model.addAttribute("runs", repository.findAll());
+		model.addAttribute("runs", repository.findAllByOrderByPerfDayDesc());
 		model.addAttribute("users", urepository.findAll());
 		return "runninglist";
 	}
@@ -120,54 +120,27 @@ public class JuoksuController {
 		Long nytKayttisId = currentUserName(authentication);
 		System.out.println("OLLAAN ADDRUNISSA, toimiiko userid: " + nytKayttisId);
 		Run newRun = new Run();
+
 		model.addAttribute("run", newRun);
 		// model.addAttribute("categories", crepository.findAll());
-		// model.addAttribute("user", urepository.findAll());
+		model.addAttribute("user", urepository.findAll());
+//		
+		// urepository.save(user);
 		urepository.findByUserId(nytKayttisId);
 		User user = new User(); // ei oo kyllä sinänsä uus käyttäjä vaan vanha
 		// mutta luodaan ikään kuin uusi instanssi
 		user = urepository.findByUserId(nytKayttisId);
 
-		// se ei toimi näin koska tämä metodi ei tallenna vielä arvoja
-		// vasta syöttää niitä
-		// joten se ei tässä vaiheessa pysty ottamaan mitään arvoa getPricella koska
-		// kirjassa ei ole vielä mitään
-		// user.laskeHinta(newBook.getPrice());
 		System.out.println("MIKÄ ON MATKA YHTEENSÄ JOS JOKA LISÄYKSELLÄ LISÄÄ" + user.getDistTogether());
-		// ELI ENÄÄ PITÄIS SAADA LASKEHINTA PARAMETRIKSI BOOK.PRICE JA HOMMA OLIS DONE
-		// päivittääkö tämä tän "uuden" vanhaksi tällä id:llä
-		// sit pitäis vielä työntää tämä meidän user sinne kirjaan
-		// urepository.save(user); // nyt se kyllä tallentaa sen muuten vaan, ei tää
-		// liity nyt mitenkään siihen
-		// entityyn mitä ollaan luomassa
-		model.addAttribute("user", user);
-		urepository.save(user);
-		// user.laskeHinta(newBook.getPrice());
-		System.out.println("TOIMIIKO TÄMÄ EDES TEORIASSA " + user);
-		// ei tämä kyllä näin toimi
-		return "addrun";
-	}
-
-//	@RequestMapping(value = "/add")
-//	public String addUserBook(Model model, Authentication authentication) {
-//		Long nytKayttisId = currentUserName(authentication);
-//		System.out.println("OLLAAN ADDBOOKISSA, toimiiko userid: " + nytKayttisId);
-//		model.addAttribute("book", new Book());
-//		// model.addAttribute("categories", crepository.findAll());
-//		// model.addAttribute("user", urepository.findAll());
-//		urepository.findByUserId(nytKayttisId);
-//		User user = new User(); // ei oo kyllä uus käyttäjä vaan vanha
-//		user = urepository.findByUserId(nytKayttisId); // päivittääkö tämä tän "uuden" vanhaksi tällä id:llä
-//		// sit pitäis vielä työntää tämä meidän user sinne kirjaan
-//		// urepository.save(user); // nyt se kyllä tallentaa sen muuten vaan, ei tää
+//		// päivittääkö tämä tän "uuden" vanhaksi tällä id:llä
+		urepository.save(user); // nyt se kyllä tallentaa sen muuten vaan, ei tää
 //		// liity nyt mitenkään siihen
 //		// entityyn mitä ollaan luomassa
-//		model.addAttribute("user", user);
-//		urepository.save(user);
-//		System.out.println("TOIMIIKO TÄMÄ EDES TEORIASSA " + user);
-//		// ei tämä kyllä näin toimi
-//		return "adduserbook";
-//	}
+		model.addAttribute("user", user);
+		System.out.println("TOIMIIKO TÄMÄ EDES TEORIASSA " + user);
+
+		return "addrun";
+	}
 
 //	// RESTful service to get user by username
 //	@RequestMapping(value = "/username/{id}", method = RequestMethod.GET)
@@ -177,12 +150,24 @@ public class JuoksuController {
 //
 
 	@RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
-	public String editRun(@PathVariable("id") Long runId, Model model) {
+	public String editRun(@PathVariable("id") Long runId, Model model, Authentication authentication) {
 		System.out.println("TULLAAN editRuniin" + runId);
-		// Optional<Book> book = repository.findById(bookId);
-		model.addAttribute("book", repository.findById(runId)); // etsitään aiemmin luotu run id:llä
-		model.addAttribute("users", urepository.findAll());
-		// model.addAttribute("categories", crepository.findAll());
+
+		Long nytKayttisId = currentUserName(authentication);
+		System.out.println("OLLAAN ADDRUNISSA, toimiiko userid: " + nytKayttisId);
+		model.addAttribute("user", urepository.findAll());
+//		
+		// urepository.save(user);
+		urepository.findByUserId(nytKayttisId);
+		User user = new User(); // ei oo kyllä sinänsä uus käyttäjä vaan vanha
+		// mutta luodaan ikään kuin uusi instanssi
+		user = urepository.findByUserId(nytKayttisId);
+
+		model.addAttribute("run", repository.findById(runId)); // etsitään aiemmin
+		// luotu run id:llä
+		// model.addAttribute("users", urepository.findAll());
+		model.addAttribute("user", user);
+
 		return "editrun";
 	}
 
@@ -194,14 +179,50 @@ public class JuoksuController {
 
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public String save(Run run, User user) {
+		// run.muutaPaiva(run.getPerfDay());
 		repository.save(run);
 		// lasketaan lisäys
 		// lisäys lasketaan per käyttäjä
+
 		user.laskeMatka(run.getDistance());
 		urepository.save(user);
 		// huom laskee vain lisäykset
 		// ei vanhoja
 		// aka ei kovakoodattuja eli ei pitäisi haitata
+		return "redirect:runninglist";
+	}
+
+	@RequestMapping(value = "/saveedit", method = RequestMethod.POST)
+	public String saveEdit(Run run, Authentication authentication) {
+		// user.laskeHinta(book.getPrice());
+		Long nytKayttisId = currentUserName(authentication);
+		System.out.println("OLLAAN EDITBOOKISSA, toimiiko userid: " + nytKayttisId);
+		urepository.findByUserId(nytKayttisId);
+		User user = new User(); // ei oo kyllä uus käyttäjä vaan vanha
+		user = urepository.findByUserId(nytKayttisId);
+		// System.out.println("MIKÄ ON HINTA YHTEENSÄ ENNEN EDITIN TALLENTAMISTA " +
+		// user.getPriceTogether());
+
+		// user.laskeHinta(newBook.getPrice());
+		System.out.println("TOIMIIKO TÄMÄ EDES TEORIASSA " + user);
+		System.out.println("toimiiko nyt userID " + user.getUserId());
+		// tässä menee jo vituiks
+		// eli jostain syystä nyt tämä lukee userid:ksi ton kirjan id:n
+		// ja sehän ei sovi
+		// mut miksi?
+		repository.save(run);
+		// eli periaatteessa user.getPriceTogether() -
+		// user.laskeHinta(book.getPrice());?
+
+		System.out.println("hinta yhteensä ennen uuden lisäystä " + user.getDistTogether());
+		System.out.println("nyt tallennettavan juoksun hinta " + run.getDistance());
+
+		// user.laskeMatka(run.getDistance());
+		// nyt se laskee uuden hinnan vanhojen kertyneiden päälle
+		// eli pitäisi jotenkin miinustaa vanha hinta alta pois editissä
+		// eli tarvittais varmaan väliluokka jota ei nyt ole
+		urepository.save(user);
+
 		return "redirect:runninglist";
 	}
 

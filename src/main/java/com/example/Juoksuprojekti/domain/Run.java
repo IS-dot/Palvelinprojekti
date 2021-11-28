@@ -1,11 +1,16 @@
 package com.example.Juoksuprojekti.domain;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 public class Run {
@@ -15,9 +20,13 @@ public class Run {
 	private Long id;
 	private String type;
 	private double distance;
-	private String starttime;
-	private String endtime;
+	// private String duration;
+	// private String endtime;
+
 	private double totalDist;
+
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
+	private LocalDate perfDay;
 
 	@ManyToOne
 	@JoinColumn(name = "userId")
@@ -26,12 +35,11 @@ public class Run {
 	public Run() {
 	}
 
-	public Run(String type, double distance, String starttime, String endtime, User user) {
+	public Run(String type, double distance, LocalDate perfDay, User user) {
 		super();
 		this.type = type;
 		this.distance = distance;
-		this.starttime = starttime;
-		this.endtime = endtime;
+		this.perfDay = perfDay;
 		this.totalDist = 0;
 		this.user = user;
 	}
@@ -39,6 +47,14 @@ public class Run {
 	// metodi juoksumatkan laskemista varten
 	public void juokse(double totalDist) {
 		this.totalDist += totalDist;
+	}
+
+	// metodi päivämäärän konvertoimista varten
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
+	public void muutaPaiva(String para) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		LocalDate newDate = LocalDate.parse(para, formatter);
+		// this.perfDay = newDay;
 	}
 
 	public Long getId() {
@@ -65,22 +81,6 @@ public class Run {
 		this.distance = distance;
 	}
 
-	public String getStarttime() {
-		return starttime;
-	}
-
-	public void setStarttime(String starttime) {
-		this.starttime = starttime;
-	}
-
-	public String getEndtime() {
-		return endtime;
-	}
-
-	public void setEndtime(String endtime) {
-		this.endtime = endtime;
-	}
-
 	public double getTotalDist() {
 		return totalDist;
 	}
@@ -97,10 +97,18 @@ public class Run {
 		this.user = user;
 	}
 
+	public LocalDate getPerfDay() {
+		return perfDay;
+	}
+
+	public void setPerfDay(LocalDate perfDay) {
+		this.perfDay = perfDay;
+	}
+
 	@Override
 	public String toString() {
-		return "Run [id=" + id + ", type=" + type + ", distance=" + distance + ", starttime=" + starttime + ", endtime="
-				+ endtime + ", totalDist=" + totalDist + ", user=" + user + "]";
+		return "Run [id=" + id + ", type=" + type + ", distance=" + distance + ", perfDay=" + perfDay + ", totalDist="
+				+ totalDist + ", user=" + user + "]";
 	}
 
 }

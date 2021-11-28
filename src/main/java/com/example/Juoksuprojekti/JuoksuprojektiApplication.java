@@ -1,5 +1,8 @@
 package com.example.Juoksuprojekti;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -37,11 +40,14 @@ public class JuoksuprojektiApplication {
 
 			// huom! restin ansiosta käyttäjätunnuksen ja salasanan jne saa selaimeen
 			// näkyviin, ei hyvä
-
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 			// luodaan joitain testisuorituksia
-			Run run1 = new Run("Polkujuoksu", 5.8, "1120", "1230", urepository.findByUsername("user"));
-			Run run2 = new Run("Vauhtikestävyys", 4.0, "1530", "1600", urepository.findByUsername("testi"));
-			Run run3 = new Run("Peruskunto", 12.5, "1700", "1810", urepository.findByUsername("testi"));
+			Run run1 = new Run("Polkujuoksu", 5.8, LocalDate.parse("05/05/2021", formatter),
+					urepository.findByUsername("user"));
+			Run run2 = new Run("Vauhtikestävyys", 4.0, LocalDate.parse("10/11/2021", formatter),
+					urepository.findByUsername("testi"));
+			Run run3 = new Run("Peruskunto", 12.5, LocalDate.parse("18/11/2021", formatter),
+					urepository.findByUsername("testi"));
 			// tallennetaan
 			rrepository.save(run1);
 			rrepository.save(run2);
