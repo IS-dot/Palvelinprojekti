@@ -8,6 +8,8 @@ public interface RunRepository extends CrudRepository<Run, Long> {
 
 	List<Run> findAllByType(String type);
 
+	// Run findByUser(User user);
+
 	List<Run> findAllByOrderByIdAsc();
 
 	List<Run> findAllByOrderByPerfDayDesc();

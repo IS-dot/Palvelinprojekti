@@ -32,16 +32,17 @@ public class JuoksuController {
 		return "login";
 	}
 
-//	@RequestMapping(value = "/username", method = RequestMethod.GET)
-//	@ResponseBody
-//	public String currentUserNameSimple(HttpServletRequest request) {
-//		Principal principal = request.getUserPrincipal();
-//		return principal.getName();
+//	@RequestMapping(value = "/login", method = RequestMethod.GET)
+//	public String loginPage(HttpServletRequest httpServletRequest, Model model) {
+//		if (httpServletRequest.isUserInRole("ADMIN")) {
+//			return "adminlist";
+//		} else if (httpServletRequest.isUserInRole("USER")) {
+//			return "runninglist";
+//		} else {
+//			return "login";
+//		}
 //	}
-	// tää on nyt rest-metodi
-	// miten saan tän metodin joko kutsuttua siinä add-metodissa
-	// tää ohjattua suoraan thymeleafiin
-	// paikallisia muuttujia nääs
+
 	@RequestMapping(value = "/username", method = { RequestMethod.GET, RequestMethod.POST })
 	@ResponseBody
 	public Long currentUserName(Authentication authentication) {
@@ -69,8 +70,16 @@ public class JuoksuController {
 		model.addAttribute("users", urepository.findAll());
 		return "runninglist";
 	}
-	// lisätään adminbooklist, jonne ohjataan vain admin käyttäjä
+	// lisätään adminbooklist, jonne päästetään vain admin käyttäjä
 	// täällä näkyy kaikki kirjat
+
+	@PreAuthorize("hasAuthority('ADMIN')")
+	@RequestMapping(value = { "/adminlist" })
+	public String adminList(Model model) {
+		model.addAttribute("runs", repository.findAllByOrderByPerfDayDesc());
+		model.addAttribute("users", urepository.findAll());
+		return "adminlist";
+	}
 
 //	@PreAuthorize("hasAuthority('ADMIN')")
 //	@RequestMapping(value = "/adminbooklist")
@@ -79,19 +88,19 @@ public class JuoksuController {
 //		return "booklist";
 //	}
 
-	// RESTful service to get all books
+	// RESTful service to get all runs
 	@RequestMapping(value = "/runs", method = RequestMethod.GET)
 	public @ResponseBody List<Run> runListRest() {
 		return (List<Run>) repository.findAll();
 	}
 
-	// RESTful service to get book by id
+	// RESTful service to get run by id
 	@RequestMapping(value = "/run/{id}", method = RequestMethod.GET)
 	public @ResponseBody Optional<Run> findRunRest(@PathVariable("id") Long runId) {
 		return repository.findById(runId);
 	}
 
-	// RESTful service to get all books by one author
+	// RESTful service to get all runs by type
 	@RequestMapping(value = "/type/{type}", method = RequestMethod.GET)
 	public @ResponseBody List<Run> findTypeRunsRest(@PathVariable String type) {
 		return (List<Run>) repository.findAllByType(type);
@@ -106,14 +115,6 @@ public class JuoksuController {
 	// http://localhost:8080/api/users/3/books --> get all books with userId three
 	// okay so what do I do with this info
 	//
-
-//	@RequestMapping(value = "/add")
-//	public String addBook(Model model) {
-//		model.addAttribute("run", new Run());
-//		// model.addAttribute("categories", crepository.findAll());
-//		model.addAttribute("users", urepository.findAll());
-//		return "addrun";
-//	}
 
 	@RequestMapping(value = "/add")
 	public String addRun(Model model, Authentication authentication) {
@@ -142,6 +143,16 @@ public class JuoksuController {
 		return "addrun";
 	}
 
+	@PreAuthorize("hasAuthority('ADMIN')")
+	@RequestMapping(value = "/adminadd")
+	public String adminAddRun(Model model, Authentication authentication) {
+		Run newRun = new Run();
+		model.addAttribute("run", newRun);
+		// admin-puolella valitaan kaikista käyttäjistä
+		model.addAttribute("users", urepository.findAll());
+		return "adminadd";
+	}
+
 //	// RESTful service to get user by username
 //	@RequestMapping(value = "/username/{id}", method = RequestMethod.GET)
 //	public @ResponseBody User findUsername(@PathVariable("id") String username) {
@@ -154,7 +165,7 @@ public class JuoksuController {
 		System.out.println("TULLAAN editRuniin" + runId);
 
 		Long nytKayttisId = currentUserName(authentication);
-		System.out.println("OLLAAN ADDRUNISSA, toimiiko userid: " + nytKayttisId);
+		System.out.println("OLLAAN EDITRUNISSA, toimiiko userid: " + nytKayttisId);
 		model.addAttribute("user", urepository.findAll());
 //		
 		// urepository.save(user);
@@ -162,13 +173,62 @@ public class JuoksuController {
 		User user = new User(); // ei oo kyllä sinänsä uus käyttäjä vaan vanha
 		// mutta luodaan ikään kuin uusi instanssi
 		user = urepository.findByUserId(nytKayttisId);
+		// etsitään aiemmin luotu run id:llä
+		model.addAttribute("run", repository.findById(runId));
 
-		model.addAttribute("run", repository.findById(runId)); // etsitään aiemmin
-		// luotu run id:llä
+		Optional<Run> thisRun = repository.findById(runId);
+		System.out.println("MIkä on thisrun " + thisRun);
+		double oldDistance = thisRun.get().getDistance();
+		System.out.println("Mikä on distance ennen muokkausta " + oldDistance);
+		System.out.println("KOKONAISMATKA ENNEN KUN KOSKETTIIN LASKEMATKAAN " + user.getDistTogether());
+		// eli meillä on nyt se vanha matka
+		// miten saan sen syötettyä tonne metodiin niin että se vähentääkin sen
+		// siis mun pitäis vaan saada kerrottua toi olddistance miinus yhdellä
+		double fixer = (-1.0);
+		double fixOldDistance = fixer * oldDistance;
+		// vähennetään kokonaismatkasta vanha matka
+		user.laskeMatka(fixOldDistance);
+		System.out.println("KOKONAISMATKA KUN NYT EDITOITAVA MATKA ON VÄHENNETTY, MUTTA EI VIELÄ TALLENNETTU UUDESTAAN "
+				+ user.getDistTogether());
+
 		// model.addAttribute("users", urepository.findAll());
 		model.addAttribute("user", user);
 
 		return "editrun";
+	}
+
+//	@PreAuthorize("hasAuthority('ADMIN')")
+//	@RequestMapping(value = "/adminedit/{id}", method = RequestMethod.GET)
+//	public String adminEditRun(@PathVariable("id") Long runId, Model model, Authentication authentication) {
+//		System.out.println("TULLAAN admineditRuniin" + runId);
+//		model.addAttribute("run", repository.findById(runId)); // etsitään aiemmin
+//		// luotu run id:llä
+//		model.addAttribute("users", urepository.findAll());
+//
+//		return "adminedit";
+//	}
+
+	@PreAuthorize("hasAuthority('ADMIN')")
+	@RequestMapping(value = "/adminedit/{id}", method = RequestMethod.GET)
+	public String adminEditRun(@PathVariable("id") Long runId, Model model) {
+		System.out.println("TULLAAN admineditRuniin" + runId);
+		// Long thisUserId = run.getUser().getUserId();
+		Optional<Run> thisRun = findRunRest(runId);
+		Long thisUserId = thisRun.get().getUser().getUserId();
+		Optional<User> thisUser = findUserRest(thisUserId);
+		System.out.println("mikä on thisUser nyt " + thisUser);
+		Long userIdNow = thisUser.get().getUserId();
+		System.out.println("olisko tämä nyt se userid " + userIdNow);
+
+		User user = urepository.findByUserId(userIdNow);
+		System.out.println("Admineditrunissa userid on " + thisUser);
+		model.addAttribute("run", repository.findById(runId)); // etsitään aiemmin
+		// luotu run id:llä
+
+		// model.addAttribute("users", urepository.findAll());
+		model.addAttribute("user", user);
+
+		return "adminedit";
 	}
 
 //	@RequestMapping(value = "/save", method = RequestMethod.POST)
@@ -188,36 +248,83 @@ public class JuoksuController {
 		urepository.save(user);
 		// huom laskee vain lisäykset
 		// ei vanhoja
-		// aka ei kovakoodattuja eli ei pitäisi haitata
+		// aka ei kovakoodattuja mutta ei pitäisi haitata
 		return "redirect:runninglist";
 	}
 
-	@RequestMapping(value = "/saveedit", method = RequestMethod.POST)
-	public String saveEdit(Run run, Authentication authentication) {
-		// user.laskeHinta(book.getPrice());
-		Long nytKayttisId = currentUserName(authentication);
-		System.out.println("OLLAAN EDITBOOKISSA, toimiiko userid: " + nytKayttisId);
-		urepository.findByUserId(nytKayttisId);
-		User user = new User(); // ei oo kyllä uus käyttäjä vaan vanha
-		user = urepository.findByUserId(nytKayttisId);
-		// System.out.println("MIKÄ ON HINTA YHTEENSÄ ENNEN EDITIN TALLENTAMISTA " +
-		// user.getPriceTogether());
+	@RequestMapping(value = "/adminsave", method = RequestMethod.POST)
+	public String adminSave(Run run, User user) {
 
-		// user.laskeHinta(newBook.getPrice());
+		repository.save(run);
+		// lasketaan lisäys
+		// lisäys lasketaan per käyttäjä
+		user.laskeMatka(run.getDistance());
+		System.out.println("Mikä on userid täällä tallennettaessa ekaa kertaa " + user);
+		// täällä on vielä oikein
+		urepository.save(user);
+
+		return "redirect:adminlist";
+	}
+
+	@RequestMapping(value = "/adminsaveedit", method = { RequestMethod.GET, RequestMethod.POST })
+	public String adminSaveEdit(Run run, User user) {
+
+		Long thisId = run.getId();
+		Optional<Run> thisRun = findRunRest(thisId);
+		double oldeDistance = thisRun.get().getDistance();
+		System.out.println("Mikäs matka täällä näkyy " + oldeDistance);
+		double fixDistance = (-1.0) * oldeDistance;
+
+		// Long thisId = run.getId();
+		// Optional<Run> thisRun = findRunRest(thisId);
+		User editUser = thisRun.get().getUser();
+		Long editUserId = editUser.getUserId();
+		System.out.println("mikä on edituserid " + editUserId);
+
+		user = urepository.findByUserId(editUserId);
+		System.out.println("mikä on tallennettu käyttäjä " + user);
+		urepository.save(user);
+		run.setUser(user);
+		user.laskeMatka(fixDistance);
+		System.out.println("KOKONAISMATKA SAVEEDITISSÄ ENNEN REPO.SAVERUNIA " + user.getDistTogether());
+
+		repository.save(run);
+
+		System.out.println("matka yhteensä ennen uuden lisäystä " + user.getDistTogether());
+		System.out.println("nyt tallennetun juoksun matka " + run.getDistance());
+
+		user.laskeMatka(run.getDistance());
+
+		urepository.save(user);
+		return "redirect:adminlist";
+	}
+
+	@RequestMapping(value = "/saveedit", method = { RequestMethod.GET, RequestMethod.POST })
+	public String saveEdit(Run run, Authentication authentication) {
+		Long thisId = run.getId();
+		Optional<Run> thisRun = findRunRest(thisId);
+		double oldeDistance = thisRun.get().getDistance();
+		System.out.println("Mikäs matka täällä näkyy " + oldeDistance);
+		double fixDistance = (-1.0) * oldeDistance;
+
+		Long nytKayttisId = currentUserName(authentication);
+		System.out.println("OLLAAN SAVEEDITISSÄ, toimiiko userid: " + nytKayttisId);
+		urepository.findByUserId(nytKayttisId);
+//		User user = new User(); // ei oo kyllä uus käyttäjä vaan vanha
+//		user = urepository.findByUserId(nytKayttisId);
+		User user = urepository.findByUserId(nytKayttisId);
+
 		System.out.println("TOIMIIKO TÄMÄ EDES TEORIASSA " + user);
 		System.out.println("toimiiko nyt userID " + user.getUserId());
-		// tässä menee jo vituiks
-		// eli jostain syystä nyt tämä lukee userid:ksi ton kirjan id:n
-		// ja sehän ei sovi
-		// mut miksi?
+		user.laskeMatka(fixDistance);
+		System.out.println("KOKONAISMATKA SAVEEDITISSÄ ENNEN REPO.SAVERUNIA " + user.getDistTogether());
+
 		repository.save(run);
-		// eli periaatteessa user.getPriceTogether() -
-		// user.laskeHinta(book.getPrice());?
 
-		System.out.println("hinta yhteensä ennen uuden lisäystä " + user.getDistTogether());
-		System.out.println("nyt tallennettavan juoksun hinta " + run.getDistance());
+		System.out.println("matka yhteensä ennen uuden lisäystä " + user.getDistTogether());
+		System.out.println("nyt tallennetun juoksun matka " + run.getDistance());
 
-		// user.laskeMatka(run.getDistance());
+		user.laskeMatka(run.getDistance());
 		// nyt se laskee uuden hinnan vanhojen kertyneiden päälle
 		// eli pitäisi jotenkin miinustaa vanha hinta alta pois editissä
 		// eli tarvittais varmaan väliluokka jota ei nyt ole

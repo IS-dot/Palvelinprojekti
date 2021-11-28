@@ -1,0 +1,93 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>List of runs</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" th:href="@{css/bootstrap.min.css}" />
+    <link th:rel="stylesheet" th:href="@{css/bootstrap-datepicker.css}"/>
+    <link th:rel="stylesheet" th:href="@{css/bootstrap-datepicker.standalone.css}"/>
+    <link th:rel="stylesheet" th:href="@{webjars/bootstrap/4.0.0-2/css/bootstrap.min.css} "/>
+    <link th:rel="stylesheet" th:href="@{webjars/font-awesome/5.11.2/css/all.css} "/>
+</head>
+<body>
+	<h1>Add run</h1>
+	
+<!-- 	<div th:if="${#httpServletRequest.remoteUser != null}">
+    <p th:text="${#httpServletRequest.remoteUser}">
+    </p>
+    
+</div> -->
+
+	<div>
+		<form th:object="${run}" th:action="@{adminsave}" action="#" method="post">
+		  	<label for="type">Type</label>
+			<input type="text" id="type" th:field="*{type}" />
+			<div style="clear: both; display: block; height: 10px;"></div>
+		  	<label for="distance">Distance</label>
+			<input type="text" id="distance" th:field="*{distance}" />
+<!-- 			<div style="clear: both; display: block; height: 10px;"></div>
+			<label for="starttime">Start time</label>
+			<input type="text" th:field="*{starttime}" />
+			<div style="clear: both; display: block; height: 10px;"></div>
+			<label for="endtime">End time</label>
+			<input type="text" th:field="*{endtime}" />
+			 -->
+	  
+	  			
+	  
+	 <!-- 	 <div th:if="${#httpServletRequest.remoteUser == 'admin'}">   		
+	       <div style="clear: both; display: block; height: 10px;"></div>
+			<label for="userlist">User</label>
+			<select id= userlist th:field="*{user}" class="hidden">
+				<option th:each="user: ${users}" th:value="${user.userId}" th:text="${user.username}"></option>
+			</select> 
+			</div>
+	   -->
+			 		
+	       <div style="clear: both; display: block; height: 10px;"></div>
+			<label for="userlist">User</label>
+			<select id= userlist th:field="*{user}" class="hidden">
+				<option th:each="user: ${users}" th:value="${user.userId}" th:text="${user.username}"></option>
+			</select> 
+			
+			 
+			 <!-- <label for="user"></label>
+			<input type="hidden" id="user" th:field="*{user}" th:value="${user.userId}" th:text="${user.username}"/> -->
+			 
+			<div class="col-md-4 mt-5">
+                <label for="perfDay">Day of Run</label>
+                <div class="input-group date">
+                    <input type="text" class="form-control" id="perfDay" autocomplete="off" th:field="*{perfDay}"/>
+                    <div class="input-group-append">
+                        <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                    </div>
+                </div>
+                </div>
+			 
+				
+			<div style="clear: both; display: block; height: 10px;"></div>
+			<input type="submit" value="Save" class="btn btn-success"/></input>
+			
+			
+		</form>
+	
+		<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+		<script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+		<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+		<script th:src="@{js/bootstrap-datepicker.min.js}"></script>
+		<script th:src="@{js/bootstratp-datepicker-localsettings.js}"></script>
+		
+		<script>
+		    $('.input-group.date').datepicker({
+		        autoclose: true,
+		        todayHighlight: true
+		    });
+		</script>
+		
+			
+			<!-- <div style="clear: both; display: block; height: 10px;"></div>
+			<input type="submit" value="Save"></input> -->
+			
+	</div>
+</body>
+</html>
