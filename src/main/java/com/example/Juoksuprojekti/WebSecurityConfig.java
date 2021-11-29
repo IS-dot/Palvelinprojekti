@@ -28,23 +28,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 
 //
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().antMatchers("/css/**").permitAll() // Enable css when logged out
-				.and().authorizeRequests().antMatchers("/signup", "/saveuser").permitAll().and().authorizeRequests()
-				.anyRequest().authenticated().and().formLogin().loginPage("/login")
-				.defaultSuccessUrl("/runninglist", true).permitAll().and().logout().permitAll()
-				.invalidateHttpSession(true); // Invalidate session;
-	}
-
 //	@Override
 //	protected void configure(HttpSecurity http) throws Exception {
-//		http.authorizeRequests().antMatchers("/css/**").permitAll().antMatchers("/adminlist").hasAuthority("ADMIN")
+//		http.authorizeRequests().antMatchers("/css/**").permitAll() // Enable css when logged out
 //				.and().authorizeRequests().antMatchers("/signup", "/saveuser").permitAll().and().authorizeRequests()
 //				.anyRequest().authenticated().and().formLogin().loginPage("/login")
-//				.successHandler(authenticationSuccessHandler).permitAll().and().logout().permitAll().and().csrf()
-//				.disable();
+//				.defaultSuccessUrl("/runninglist", true).permitAll().and().logout().permitAll()
+//				.invalidateHttpSession(true); // Invalidate session;
 //	}
+
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http.authorizeRequests().antMatchers("/css/**").permitAll().antMatchers("/adminlist").hasAuthority("ADMIN")
+				.and().authorizeRequests().antMatchers("/signup", "/saveuser").permitAll().and().authorizeRequests()
+				.anyRequest().authenticated().and().formLogin().loginPage("/login")
+				.successHandler(authenticationSuccessHandler).permitAll().and().logout().permitAll().and().csrf()
+				.disable();
+	}
 
 //	@Override
 //	protected void configure(HttpSecurity http) throws Exception {

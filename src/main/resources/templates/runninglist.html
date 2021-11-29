@@ -47,17 +47,18 @@
     		<td th:text="${run.type}"></td>
     		<td th:text="${run.distance}"></td>
     		<td th:text="${run.perfDay}"></td>
+    		<td></td>
  				<td sec:authorize="hasAuthority('ADMIN')"><a th:href="@{/delete/{id}(id=${run.id})}" class="btn btn-danger">Delete</a></td> 
  				<td><a class="btn btn-success" th:href="@{/edit/{id}(id=${run.id})}">Edit</a></td> 
     	</tr>
-    		<tr th:if="${#httpServletRequest.remoteUser == 'admin'}" th:each = "run : ${runs}">
+<!--     		<tr th:if="${#httpServletRequest.remoteUser == 'admin'}" th:each = "run : ${runs}">
     		<td th:text="${run.type}"></td>
     		<td th:text="${run.distance}"></td>
     		<td th:text="${run.perfDay}"></td>
     		<td th:text="${run.user.username}"></td>
  				<td sec:authorize="hasAuthority('ADMIN')"><a th:href="@{/delete/{id}(id=${run.id})}" class="btn btn-danger">Delete</a></td> 
  				<td><a class="btn btn-success" th:href="@{/edit/{id}(id=${run.id})}">Edit</a></td> 
-    	</tr>
+    	</tr> -->
      </table>
      
       <table class="table table-striped">

@@ -10,7 +10,8 @@
 	<div class="col-md-4">
 		<h1>Runs</h1>
 	</div>
-	<div class="col-md-4">
+	<!-- <div class="col-md-4">
+	</div> -->
 		<h3 th:inline="text">Welcome to a custom admin page [[${#httpServletRequest.remoteUser}]]</h3>
 		
 	<!-- <div th:if="${#httpServletRequest.remoteUser != null}">
@@ -20,7 +21,7 @@
     </p>
     <span sec:authentication="name">Bob</span>
      <span sec:authentication="principal.authorities">[ROLE_USER, ROLE_ADMIN]</span> -->
-	</div>
+	
 	
 		<div class="col-md-4" style="padding:20px 0">
 		<form th:action="@{/logout}" method="post">

@@ -48,10 +48,13 @@ public class JuoksuprojektiApplication {
 					urepository.findByUsername("testi"));
 			Run run3 = new Run("Peruskunto", 12.5, LocalDate.parse("18/11/2021", formatter),
 					urepository.findByUsername("testi"));
+			Run run4 = new Run("Vauhtikestävyys", 6.5, LocalDate.parse("15/11/2021", formatter),
+					urepository.findByUsername("admin"));
 			// tallennetaan
 			rrepository.save(run1);
 			rrepository.save(run2);
 			rrepository.save(run3);
+			rrepository.save(run4);
 
 			// Create users: admin/admin user/user
 
