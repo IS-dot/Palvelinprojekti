@@ -1,27 +1,27 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
-    <title>List of runs</title>
+    <title>100k Challenge</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" th:href="@{css/bootstrap.min.css}" />
 </head>
 <body>
+
+<header>
 <div class="container">
-	<div class="col-md-4">
-		<h1>Runs</h1>
+		<h1>100k Challenge</h1>
+		<h3 th:inline="text">Welcome to a custom administrator page, [[${#httpServletRequest.remoteUser}]]</h3>
 	</div>
-	<!-- <div class="col-md-4">
-	</div> -->
-		<h3 th:inline="text">Welcome to a custom admin page [[${#httpServletRequest.remoteUser}]]</h3>
-		
-	<!-- <div th:if="${#httpServletRequest.remoteUser != null}">
-    <p th:text="${#httpServletRequest.remoteUser}"><br>
-    </p>
-    <p th:text="${#httpServletRequest.userPrincipal}">
-    </p>
-    <span sec:authentication="name">Bob</span>
-     <span sec:authentication="principal.authorities">[ROLE_USER, ROLE_ADMIN]</span> -->
-	
+	</header>
+	<div class="container">
+	<div>
+		<p>You can add, delete and edit records of runs for all users. If you want to add records for yourself, please do so using the main page. <br>
+		If you need to modify the USER of a saved record, we ask you to delete the record in question instead, and add a new one in its place. Thank you! <br>
+		On this page you can view the the total amount of kilometres run by all users.
+		</p>
+		<h5>Happy running!</h5>
+
+	</div>
 	
 		<div class="col-md-4" style="padding:20px 0">
 		<form th:action="@{/logout}" method="post">
@@ -34,6 +34,10 @@
 			<input type="submit" value="Return to main page" class="btn btn-primary"/>
 		</form>
 	</div>
+	
+	 <div class="col-md-4" style="padding:20px 0">
+	 <a class="btn btn-success" href="/adminadd">Add new run</a> 
+	 </div>
 	
     <table class="table table-striped">
 		<tr>
@@ -64,18 +68,17 @@
      
       <table class="table table-striped">
       <tr>
-		    <th>Total distance</th>
-		    <th>Distance to goal</th>
+		    <th>Total distance (km)</th>
+		    <th>Distance to goal (km)</th>
 		</tr>
-     <tr th:if="${#httpServletRequest.remoteUser == user.username}" th:each = "user : ${users}"> 
-    		<td th:text="${user.distTogether}"></td>
-    		<td th:text="${100 - user.distTogether}"></td>
+		<tr> 
+    		<td th:object="${run}" method="get"><a th:field="*{totalDist}" th:text="${run.totalDist}"></a></td>
+    		<td th:object="${run}" method="get"><a th:field="*{totalDist}" th:text="${100000 - run.totalDist}"></a></td>
     	</tr>
+	
     </table>	
      
-     
-	 <a class="btn btn-success" href="/adminadd">Add new run</a> 
-	 <!--  <a class="btn btn-success" href="/username/">Add book</a> --> 
-<div/>   	
+	
+</div>   	
 </body>
 </html>

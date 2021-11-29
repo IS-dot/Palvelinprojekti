@@ -27,7 +27,7 @@ public class JuoksuprojektiApplication {
 	public CommandLineRunner runDemo(RunRepository rrepository, UserRepository urepository) {
 		return (args) -> {
 			log.info("save a couple of runs");
-
+			// luodaan kaksi testikäyttäjää ja yksi admin
 			User user1 = new User("user", "$2a$10$1814xC2KWOz2qpyKvUpuR.Nab1qt/Ew28q.2nHhfagDxAyVcW4ciq", "USER",
 					"user@email.com", 0.0);
 			User user2 = new User("admin", "$2a$10$0MMwY.IQqpsVc1jC8u7IJ.2rT8b0Cd3b3sfIBGV2zfgnPGtT4r0.C", "ADMIN",
@@ -38,17 +38,16 @@ public class JuoksuprojektiApplication {
 			urepository.save(user2);
 			urepository.save(user3);
 
-			// huom! restin ansiosta käyttäjätunnuksen ja salasanan jne saa selaimeen
-			// näkyviin, ei hyvä
+			// huom! restin takia käyttäjätiedot saa lopulta myös selaimeen
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 			// luodaan joitain testisuorituksia
-			Run run1 = new Run("Polkujuoksu", 5.8, LocalDate.parse("05/05/2021", formatter),
+			Run run1 = new Run("Base Run", 8.5, LocalDate.parse("05/05/2021", formatter),
 					urepository.findByUsername("user"));
-			Run run2 = new Run("Vauhtikestävyys", 4.0, LocalDate.parse("10/11/2021", formatter),
+			Run run2 = new Run("Speed Workout", 4.0, LocalDate.parse("10/11/2021", formatter),
 					urepository.findByUsername("testi"));
-			Run run3 = new Run("Peruskunto", 12.5, LocalDate.parse("18/11/2021", formatter),
+			Run run3 = new Run("Trail Run", 12.5, LocalDate.parse("18/11/2021", formatter),
 					urepository.findByUsername("testi"));
-			Run run4 = new Run("Vauhtikestävyys", 6.5, LocalDate.parse("15/11/2021", formatter),
+			Run run4 = new Run("Tempo Run", 6.5, LocalDate.parse("15/11/2021", formatter),
 					urepository.findByUsername("admin"));
 			// tallennetaan
 			rrepository.save(run1);
@@ -56,7 +55,14 @@ public class JuoksuprojektiApplication {
 			rrepository.save(run3);
 			rrepository.save(run4);
 
-			// Create users: admin/admin user/user
+			// päivitetään vielä matkat testikäyttäjille
+			user1.laskeMatka(8.5);
+			user2.laskeMatka(6.5);
+			user3.laskeMatka(16.5);
+
+			urepository.save(user1);
+			urepository.save(user2);
+			urepository.save(user3);
 
 			log.info("fetch all runs");
 			for (Run run : rrepository.findAll()) {

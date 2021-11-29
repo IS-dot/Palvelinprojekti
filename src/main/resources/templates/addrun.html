@@ -10,39 +10,23 @@
     <link th:rel="stylesheet" th:href="@{webjars/font-awesome/5.11.2/css/all.css} "/>
 </head>
 <body>
-	<h1>Add run</h1>
+<header>
+<div class="container">
+		<h1>100k Challenge</h1>
+		<h3>Add new run</h3>
+	</div>
+	</header>
 	
-<!-- 	<div th:if="${#httpServletRequest.remoteUser != null}">
-    <p th:text="${#httpServletRequest.remoteUser}">
-    </p>
-    
-</div> -->
-
-	<div>
+	<div class="container">
+	
+	
 		<form th:object="${run}" th:action="@{save}" action="#" method="post">
-		  	<label for="type">Type</label>
+		  	<label for="type">Type of the run</label>
 			<input type="text" id="type" th:field="*{type}" />
 			<div style="clear: both; display: block; height: 10px;"></div>
-		  	<label for="distance">Distance</label>
+		  	<label for="distance">Distance (km)</label>
 			<input type="text" id="distance" th:field="*{distance}" />
-<!-- 			<div style="clear: both; display: block; height: 10px;"></div>
-			<label for="starttime">Start time</label>
-			<input type="text" th:field="*{starttime}" />
-			<div style="clear: both; display: block; height: 10px;"></div>
-			<label for="endtime">End time</label>
-			<input type="text" th:field="*{endtime}" />
-			 -->
-	  
-	  			
-	  
-	 <!-- 	 <div th:if="${#httpServletRequest.remoteUser == 'admin'}">   		
-	       <div style="clear: both; display: block; height: 10px;"></div>
-			<label for="userlist">User</label>
-			<select id= userlist th:field="*{user}" class="hidden">
-				<option th:each="user: ${users}" th:value="${user.userId}" th:text="${user.username}"></option>
-			</select> 
-			</div>
-	   -->
+
 			<div class= "hidden">   		
 	       <div style="clear: both; display: block; height: 10px;"></div>
 			<label for="userlist">User</label>
@@ -50,11 +34,9 @@
 				<option th:value="${user.userId}" th:text="${user.username}"></option>
 			</select> 
 			</div>
-			 
-			 <!-- <label for="user"></label>
-			<input type="hidden" id="user" th:field="*{user}" th:value="${user.userId}" th:text="${user.username}"/> -->
-			 
-			<div class="col-md-4 mt-5">
+			
+		
+			<div class="col-md-4">
                 <label for="perfDay">Day of Run</label>
                 <div class="input-group date">
                     <input type="text" class="form-control" id="perfDay" autocomplete="off" th:field="*{perfDay}"/>
@@ -84,10 +66,8 @@
 		    });
 		</script>
 		
-			
-			<!-- <div style="clear: both; display: block; height: 10px;"></div>
-			<input type="submit" value="Save"></input> -->
-			
+		
 	</div>
+	
 </body>
 </html>

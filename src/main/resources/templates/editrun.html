@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>List of runs</title>
+    <title>100k Challenge</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" th:href="@{css/bootstrap.min.css}" />
     <link th:rel="stylesheet" th:href="@{css/bootstrap-datepicker.css}"/>
@@ -10,40 +10,35 @@
     <link th:rel="stylesheet" th:href="@{webjars/font-awesome/5.11.2/css/all.css} "/>
 </head>
 <body>
-	<h1>Edit run</h1>
+<header>
+<div class="container">
+		<h1>100k Challenge</h1>
+		<h3>Edit run</h3>
+	</div>
+	</header>
+	
+	<div class="container">
+	
 	<div>
 		<form th:object="${run}" th:action="@{../saveedit}" action="#" method="post">
 			<label for="id"></label>
 			<input type="hidden" id="id" th:field="*{id}" readonly="readonly"/>
 			<div style="clear: both; display: block; height: 10px;"></div>
-		  	<label for="type">Type</label>
+		  	<label for="type">Type of the run</label>
 			<input type="text" id="type" th:field="*{type}" />
 			<div style="clear: both; display: block; height: 10px;"></div>
 		  	<label for="distance">Distance</label>
 			<input type="text" id="distance" th:field="*{distance}" />
-<!-- 			<div style="clear: both; display: block; height: 10px;"></div>
-		  	<label for="starttime">Start time</label>
-			<input type="text" th:field="*{starttime}" />
-			<div style="clear: both; display: block; height: 10px;"></div>
-			<label for="endtime">End time</label>
-			<input type="text" th:field="*{endtime}" /> -->
 
-		
-			
+
+
 			<div style="clear: both; display: block; height: 10px;"></div>
 			<label for="userlist">User</label>
 			<select id= userlist th:field="*{user}" class="hidden">
 				<option th:value="${user.userId}" th:text="${user.username}"></option>
 			</select>  
 			
-			
-		<!-- 	<div sec:authorize="hasAuthority('ADMIN')">
-			<div style="clear: both; display: block; height: 10px;"></div>
-			<label for="userlist">User</label>
-			<select id= userlist th:field="*{user}" class="form-control">
-				<option th:each="user: ${users}" th:value="${user.userId}" th:text="${user.username}"></option>
-			</select> 
-			</div> -->
+
 			
 			<div class="col-md-4 mt-5">
                 <label for="perfDay">Day of Run</label>
@@ -60,6 +55,7 @@
 			
 		</form>
 		
+	</div>
 	</div>
 </body>
 </html>

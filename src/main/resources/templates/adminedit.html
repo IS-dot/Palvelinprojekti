@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>List of runs</title>
+    <title>100k Challenge</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" th:href="@{css/bootstrap.min.css}" />
     <link th:rel="stylesheet" th:href="@{css/bootstrap-datepicker.css}"/>
@@ -16,18 +16,11 @@
 			<label for="id"></label>
 			<input type="hidden" id="id" th:field="*{id}" readonly="readonly"/>
 			<div style="clear: both; display: block; height: 10px;"></div>
-		  	<label for="type">Type</label>
+		  	<label for="type">Type of the run</label>
 			<input type="text" id="type" th:field="*{type}" />
 			<div style="clear: both; display: block; height: 10px;"></div>
 		  	<label for="distance">Distance</label>
 			<input type="text" id="distance" th:field="*{distance}" />
-<!-- 			<div style="clear: both; display: block; height: 10px;"></div>
-		  	<label for="starttime">Start time</label>
-			<input type="text" th:field="*{starttime}" />
-			<div style="clear: both; display: block; height: 10px;"></div>
-			<label for="endtime">End time</label>
-			<input type="text" th:field="*{endtime}" /> -->
-
 	
 		
 			<div style="clear: both; display: block; height: 10px;"></div>
@@ -38,7 +31,7 @@
 			
 			
 			<div class="col-md-4 mt-5">
-                <label for="perfDay">Day of Run</label>
+                <label for="perfDay">Day of run</label>
                 <div class="input-group date">
                     <input type="text" class="form-control" id="perfDay" autocomplete="off" th:field="*{perfDay}"/>
                     <div class="input-group-append">

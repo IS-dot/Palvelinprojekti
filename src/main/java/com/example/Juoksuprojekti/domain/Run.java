@@ -20,8 +20,6 @@ public class Run {
 	private Long id;
 	private String type;
 	private double distance;
-	// private String duration;
-	// private String endtime;
 
 	private double totalDist;
 
@@ -54,7 +52,7 @@ public class Run {
 	public void muutaPaiva(String para) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		LocalDate newDate = LocalDate.parse(para, formatter);
-		// this.perfDay = newDay;
+
 	}
 
 	public Long getId() {

@@ -1,25 +1,25 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
-    <title>List of runs</title>
+    <title>100k Challenge</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" th:href="@{css/bootstrap.min.css}" />
 </head>
 <body>
+
+<header>
 <div class="container">
-	<div class="col-md-4">
-		<h1>Runs</h1>
+		<h1>100k Challenge</h1>
+		<h3 th:inline="text">Welcome [[${#httpServletRequest.remoteUser}]]!</h3>
 	</div>
-	<div class="col-md-4">
-		<h3 th:inline="text">Welcome [[${#httpServletRequest.remoteUser}]]</h3>
-		
-	<!-- <div th:if="${#httpServletRequest.remoteUser != null}">
-    <p th:text="${#httpServletRequest.remoteUser}"><br>
-    </p>
-    <p th:text="${#httpServletRequest.userPrincipal}">
-    </p>
-    <span sec:authentication="name">Bob</span>
-     <span sec:authentication="principal.authorities">[ROLE_USER, ROLE_ADMIN]</span> -->
+	</header>
+	<div class="container">
+	<div>
+		<p>You can add and edit records of your own runs and track your progression towards the 100km goal! <br>
+		The kilometres you run also count towards the 100 000 km goal of all users, tracked by the administrator!
+		</p>
+		<h5>Happy running!</h5>
+
 	</div>
 	
 	
@@ -35,7 +35,7 @@
 </div>
     <table class="table table-striped">
 		<tr>
-		    <th>Type</th>
+		    <th>Type of the run</th>
 		    <th>Distance</th>
 		    <th>Date</th>
  			<th></th>
@@ -48,7 +48,7 @@
     		<td th:text="${run.distance}"></td>
     		<td th:text="${run.perfDay}"></td>
     		<td></td>
- 				<td sec:authorize="hasAuthority('ADMIN')"><a th:href="@{/delete/{id}(id=${run.id})}" class="btn btn-danger">Delete</a></td> 
+ 				<!-- <td sec:authorize="hasAuthority('ADMIN')"><a th:href="@{/delete/{id}(id=${run.id})}" class="btn btn-danger">Delete</a></td>  -->
  				<td><a class="btn btn-success" th:href="@{/edit/{id}(id=${run.id})}">Edit</a></td> 
     	</tr>
 <!--     		<tr th:if="${#httpServletRequest.remoteUser == 'admin'}" th:each = "run : ${runs}">
@@ -63,8 +63,8 @@
      
       <table class="table table-striped">
       <tr>
-		    <th>Total distance</th>
-		    <th>Distance to goal</th>
+		    <th>Total distance (km)</th>
+		    <th>Distance to goal (km)</th>
 		    <th></th>
 		</tr>
      <tr th:if="${#httpServletRequest.remoteUser == user.username}" th:each = "user : ${users}"> 
@@ -76,6 +76,7 @@
      
 	 <a class="btn btn-success" href="/add">Add new run</a> 
 	 <!--  <a class="btn btn-success" href="/username/">Add book</a> --> 
-<div/>   	
+
+</div>	
 </body>
 </html>
