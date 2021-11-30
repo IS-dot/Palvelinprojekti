@@ -6,14 +6,20 @@
     <link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" th:href="@{css/bootstrap.min.css}" />
     <link th:rel="stylesheet" th:href="@{css/bootstrap-datepicker.css}"/>
     <link th:rel="stylesheet" th:href="@{css/bootstrap-datepicker.standalone.css}"/>
-    <link th:rel="stylesheet" th:href="@{webjars/bootstrap/4.0.0-2/css/bootstrap.min.css} "/>
+  	<link th:rel="stylesheet" th:href="@{webjars/bootstrap/4.0.0-2/css/bootstrap.min.css} "/>
     <link th:rel="stylesheet" th:href="@{webjars/font-awesome/5.11.2/css/all.css} "/>
+<style>
+  body {
+    background-color: #f0ffff;
+    font-family: "Goudy Bookletter 1911", sans-serif;
+  }
+</style>    
 </head>
 <body>
 <header>
 <div class="container">
 		<h1>100k Challenge</h1>
-		<h3>Edit run</h3>
+		<h2>Edit run</h2>
 	</div>
 	</header>
 	
@@ -38,6 +44,7 @@
 				<option th:value="${user.userId}" th:text="${user.username}"></option>
 			</select>  
 			
+			
 
 			
 			<div class="col-md-4 mt-5">
@@ -54,6 +61,18 @@
 			<input type="submit" value="Save" class="btn btn-success"></input>
 			
 		</form>
+		<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+		<script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+		<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+		<script th:src="@{js/bootstrap-datepicker.min.js}"></script>
+		<script th:src="@{static/assets/js/bootstratp-datepicker-localsettings.js}"></script>
+		
+		<script>
+		    $('.input-group.date').datepicker({
+		        autoclose: true,
+		        todayHighlight: true
+		    });
+		</script>
 		
 	</div>
 	</div>
