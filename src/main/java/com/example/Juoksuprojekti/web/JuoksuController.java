@@ -314,7 +314,29 @@ public class JuoksuController {
 
 	@PreAuthorize("hasAuthority('ADMIN')")
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
-	public String deleteBook(@PathVariable("id") Long runId, Model model) {
+	public String deleteBook(@PathVariable("id") Long runId, User user, Model model) {
+
+		// Long thisId = run.getId();
+		// Long thisId = runId;
+		Optional<Run> thisRun = findRunRest(runId);
+		System.out.println("MIKÄ ON THISRUN " + thisRun);
+
+		double oldeDistance = thisRun.get().getDistance();
+		System.out.println("Mikäs matka täällä näkyy " + oldeDistance);
+		double fixDistance = (-1.0) * oldeDistance;
+
+		User editUser = thisRun.get().getUser();
+		Long editUserId = editUser.getUserId();
+		System.out.println("mikä on edituserid " + editUserId);
+
+		user = urepository.findByUserId(editUserId);
+		System.out.println("mikä on tallennettu käyttäjä " + user);
+		urepository.save(user);
+		thisRun.get().setUser(user);
+		user.laskeMatka(fixDistance);
+
+		System.out.println("KOKONAISMATKA DELETESSÄ ENNEN REPO.SAVERUNIA " + user.getDistTogether());
+
 		repository.deleteById(runId);
 		return "redirect:../adminlist";
 	}
